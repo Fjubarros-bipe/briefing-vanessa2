@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing de Conteúdo — Vanessa Melino</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #2C1F14;
+    --bg-section: #341F10;
+    --bg-card: #3D2515;
+    --bg-input: #4A2E1A;
+    --gold: #C9A96E;
+    --gold-light: #E0C99A;
+    --gold-dim: #8A6A3A;
+    --text: #F5ECD8;
+    --text-soft: #C8B090;
+    --text-muted: #8A7055;
+    --border: #5A3A20;
+    --border-focus: #C9A96E;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: #1A0F08;
+    padding: 52px 24px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 140%, rgba(201,169,110,0.12) 0%, transparent 65%);
+  }
+
+  .header-eyebrow {
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(30px, 7vw, 46px);
+    color: var(--text);
+    line-height: 1.15;
+  }
+
+  .header-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .gold-line {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    margin: 20px auto;
+  }
+
+  .header-sub {
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    color: var(--text-soft);
+  }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 2px;
+    background: var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* MAIN */
+  .main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 44px 20px 80px;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 52px;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .section:nth-child(1) { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.3s; }
+  .section:nth-child(4) { animation-delay: 0.4s; }
+  .section:nth-child(5) { animation-delay: 0.5s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .section-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* FIELD */
+  .field {
+    margin-bottom: 22px;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+
+  .field-hint {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-soft);
+    margin-bottom: 10px;
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 14px 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input[type="text"]::placeholder,
+  textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  input[type="text"]:focus,
+  textarea:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(201,169,110,0.10);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+  }
+
+  /* CHECKBOX & RADIO */
+  .check-group, .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .check-item, .radio-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    padding: 13px 15px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--bg-card);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .check-item:hover, .radio-item:hover {
+    border-color: var(--gold-dim);
+    background: #4A2E1A;
+  }
+
+  .check-item.checked, .radio-item.checked {
+    border-color: var(--gold);
+    background: #4A2E1A;
+  }
+
+  .check-item input[type="checkbox"],
+  .radio-item input[type="radio"] {
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    cursor: pointer;
+    position: relative;
+    margin-top: 1px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .check-item input[type="checkbox"] { border-radius: 2px; }
+  .radio-item input[type="radio"] { border-radius: 50%; }
+
+  .check-item input[type="checkbox"]:checked {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .check-item input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 9px;
+    border: 1.5px solid #1A0F08;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  .radio-item input[type="radio"]:checked {
+    border-color: var(--gold);
+    background: var(--bg-input);
+  }
+
+  .radio-item input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 9px;
+    height: 9px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+
+  .check-label {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* SCALE */
+  .scale-group {
+    display: flex;
+    gap: 8px;
+  }
+
+  .scale-item { flex: 1; }
+  .scale-item input { display: none; }
+
+  .scale-item label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--bg-card);
+  }
+
+  .scale-item input:checked + label {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #1A0F08;
+    font-weight: 500;
+  }
+
+  .scale-item label:hover {
+    border-color: var(--gold-dim);
+    color: var(--gold-light);
+  }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .scale-labels span {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.3px;
+  }
+
+  /* SUBMIT */
+  .submit-area {
+    text-align: center;
+    padding: 36px 0 0;
+  }
+
+  .submit-note {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-soft);
+    margin-bottom: 28px;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .btn-submit {
+    display: inline-block;
+    background: var(--gold);
+    color: #1A0F08;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 18px 52px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, opacity 0.2s;
+  }
+
+  .btn-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .sending-msg {
+    display: none;
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 16px;
+    letter-spacing: 1px;
+  }
+
+  .error-msg {
+    display: none;
+    font-size: 12px;
+    color: #E07070;
+    margin-top: 16px;
+  }
+
+  /* SUCCESS */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .success-icon {
+    font-size: 36px;
+    color: var(--gold);
+    margin-bottom: 28px;
+    display: block;
+  }
+
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .success-title em { font-style: italic; color: var(--gold-light); }
+
+  .success-text {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-soft);
+    line-height: 1.8;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 28px 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  .footer-text {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .footer-brand { color: var(--gold); }
+
+  /* CONTENT IDEAS GRID */
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .idea-card {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .idea-card input[type="checkbox"] {
+    display: none;
+  }
+
+  .idea-card label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 14px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    height: 100%;
+  }
+
+  .idea-card label:hover {
+    border-color: var(--gold-dim);
+    background: #4A2E1A;
+  }
+
+  .idea-card input:checked + label {
+    border-color: var(--gold);
+    background: #4A2E1A;
+  }
+
+  .idea-card-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .idea-card-text {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .idea-card-check {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--bg-input);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+
+  .idea-card input:checked + label .idea-card-check {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .idea-card input:checked + label .idea-card-check::after {
+    content: '';
+    width: 5px;
+    height: 8px;
+    border: 1.5px solid #1A0F08;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
+  }
+
+  .ideas-other {
+    margin-top: 10px;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <p class="header-eyebrow">Preparação para diária de conteúdo</p>
+  <h1 class="header-title">Briefing <em>Criativo</em></h1>
+  <div class="gold-line"></div>
+  <p class="header-sub">Responda com calma — não existe resposta errada aqui.</p>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<div class="main" id="formMain">
+
+  <!-- 01 -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-number">01</span>
+      <span class="section-title">Quem você é</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Seu nome artístico / como assina</label>
+      <input type="text" id="f_nome" placeholder="Ex: Vanessa Melino" />
+    </div>
+
+    <div class="field">
+      <label class="field-label">Em uma frase, o que você faz?</label>
+      <p class="field-hint">Não pense em currículo. Pense em como você descreveria pra uma amiga em 10 segundos.</p>
+      <textarea id="f_frase" placeholder="Ex: Eu transformo a autoestima das mulheres através da maquiagem..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Há quanto tempo você atua?</label>
+      <div class="radio-group" id="f_tempo">
+        <label class="radio-item"><input type="radio" name="tempo" value="Menos de 2 anos — ainda construindo minha base" /> <span class="check-label">Menos de 2 anos — ainda construindo minha base</span></label>
+        <label class="radio-item"><input type="radio" name="tempo" value="2 a 5 anos — tenho clientes fixos e quero crescer" /> <span class="check-label">2 a 5 anos — tenho clientes fixos e quero crescer</span></label>
+        <label class="radio-item"><input type="radio" name="tempo" value="Mais de 5 anos — experiente, quero me reposicionar" /> <span class="check-label">Mais de 5 anos — experiente, quero me reposicionar</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-number">02</span>
+      <span class="section-title">Para quem você faz</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Quem é a sua cliente ideal? Descreva ela.</label>
+      <p class="field-hint">Idade, estilo de vida, o que ela valoriza, como ela se sente antes de te contratar.</p>
+      <textarea id="f_cliente" placeholder="Ex: Mulher de 30 a 45 anos, executiva ou empreendedora, que quer se sentir poderosa mas não tem tempo..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Quais serviços você mais realiza?</label>
+      <div class="check-group" id="f_servicos">
+        <label class="check-item"><input type="checkbox" value="Make comercial (catálogos, campanhas, marcas)" /> <span class="check-label">Make comercial — catálogos, campanhas, marcas</span></label>
+        <label class="check-item"><input type="checkbox" value="Make para festas e eventos" /> <span class="check-label">Make para festas e eventos</span></label>
+        <label class="check-item"><input type="checkbox" value="Make executivo / dia a dia" /> <span class="check-label">Make executivo / dia a dia</span></label>
+        <label class="check-item"><input type="checkbox" value="Make artístico / editorial" /> <span class="check-label">Make artístico / editorial</span></label>
+        <label class="check-item"><input type="checkbox" value="Automaquiagem — aulas e cursos presenciais" /> <span class="check-label">Automaquiagem — aulas e cursos presenciais</span></label>
+        <label class="check-item"><input type="checkbox" value="Infoprodutos (curso online, e-book, método digital)" /> <span class="check-label">Infoprodutos — curso online, método digital</span></label>
+        <label class="check-item"><input type="checkbox" value="Penteados" /> <span class="check-label">Penteados</span></label>
+        <label class="check-item"><input type="checkbox" value="Atendimento personalizado / consultoria de imagem" /> <span class="check-label">Atendimento personalizado / consultoria de imagem</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Qual serviço você quer crescer mais no digital?</label>
+      <textarea id="f_crescer" placeholder="Ex: Quero construir autoridade em automaquiagem para lançar meu curso online..."></textarea>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-number">03</span>
+      <span class="section-title">Como você fala</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Como você descreveria seu jeito de se comunicar?</label>
+      <div class="radio-group" id="f_voz">
+        <label class="radio-item"><input type="radio" name="voz" value="Calorosa e próxima — falo como amiga" /> <span class="check-label">Calorosa e próxima — falo como amiga</span></label>
+        <label class="radio-item"><input type="radio" name="voz" value="Educativa e didática — gosto de ensinar" /> <span class="check-label">Educativa e didática — gosto de ensinar</span></label>
+        <label class="radio-item"><input type="radio" name="voz" value="Confiante e direta — sem rodeios" /> <span class="check-label">Confiante e direta — sem rodeios</span></label>
+        <label class="radio-item"><input type="radio" name="voz" value="Sofisticada e elegante — cuido das palavras" /> <span class="check-label">Sofisticada e elegante — cuido das palavras</span></label>
+        <label class="radio-item"><input type="radio" name="voz" value="Uma mistura — depende do momento" /> <span class="check-label">Uma mistura — depende do momento</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Quais palavras ou expressões você usa muito no dia a dia?</label>
+      <p class="field-hint">Gírias, jeitos de falar, palavras que são suas. Isso vai aparecer nos roteiros.</p>
+      <textarea id="f_expressoes" placeholder="Ex: 'linda', 'incrível', 'a pele é a base de tudo'..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">O que você NUNCA diria?</label>
+      <textarea id="f_nunca" placeholder="Ex: Palavrão, gírias muito jovens, termos muito técnicos..."></textarea>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-number">04</span>
+      <span class="section-title">Conteúdo e ideias</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Quais perguntas suas clientes sempre te fazem?</label>
+      <p class="field-hint">As dúvidas que aparecem o tempo todo — no WhatsApp, na cadeira, em todo lugar.</p>
+      <textarea id="f_perguntas" placeholder="Ex: Qual base usar para pele oleosa? Como fazer o make durar mais?"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Sobre o que você adoraria falar mas nunca falou online?</label>
+      <textarea id="f_nuncafalou" placeholder="Ex: A verdade sobre produtos famosos que não entregam o que prometem..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Você pensa em lançar um curso de automaquiagem. O que você ensinaria nele?</label>
+      <p class="field-hint">Pode ser uma ideia inicial — temas, público, formato. Isso já começa a virar conteúdo do seu perfil.</p>
+      <textarea id="f_curso" placeholder="Ex: Ensinaria mulheres a se maquiarem para o dia a dia em menos de 15 minutos, sem precisar de muitos produtos..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Você se sente confortável na frente da câmera hoje?</label>
+      <div class="scale-group">
+        <div class="scale-item"><input type="radio" name="camera" id="c1" value="1"/><label for="c1">1</label></div>
+        <div class="scale-item"><input type="radio" name="camera" id="c2" value="2"/><label for="c2">2</label></div>
+        <div class="scale-item"><input type="radio" name="camera" id="c3" value="3"/><label for="c3">3</label></div>
+        <div class="scale-item"><input type="radio" name="camera" id="c4" value="4"/><label for="c4">4</label></div>
+        <div class="scale-item"><input type="radio" name="camera" id="c5" value="5"/><label for="c5">5</label></div>
+      </div>
+      <div class="scale-labels"><span>Tremo toda</span><span>Totalmente à vontade</span></div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">O que te trava na hora de gravar?</label>
+      <div class="check-group" id="f_trava">
+        <label class="check-item"><input type="checkbox" value="Não sei o que falar" /> <span class="check-label">Não sei o que falar</span></label>
+        <label class="check-item"><input type="checkbox" value="Fico olhando para a câmera sem graça" /> <span class="check-label">Fico olhando para a câmera sem graça</span></label>
+        <label class="check-item"><input type="checkbox" value="Acho que não fico bem no vídeo" /> <span class="check-label">Acho que não fico bem no vídeo</span></label>
+        <label class="check-item"><input type="checkbox" value="Medo de julgamento / crítica" /> <span class="check-label">Medo de julgamento / crítica</span></label>
+        <label class="check-item"><input type="checkbox" value="Não tenho roteiro, fico perdida" /> <span class="check-label">Não tenho roteiro, fico perdida</span></label>
+        <label class="check-item"><input type="checkbox" value="Nada — só preciso de estrutura" /> <span class="check-label">Nada — só preciso de estrutura</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04b — IDEIAS DE CONTEÚDO -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-number">04b</span>
+      <span class="section-title">Ideias de conteúdo</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Quais formatos você gostaria de fazer?</label>
+      <p class="field-hint">Marque tudo que te anima — mesmo que ainda não saiba como executar.</p>
+      <div class="ideas-grid" id="f_ideias">
+        <div class="idea-card">
+          <input type="checkbox" id="id1" value="Dicas de maquiagem" />
+          <label for="id1">
+            <span class="idea-card-icon">💄</span>
+            <span class="idea-card-text">Dicas de maquiagem</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id2" value="Dicas de produtos" />
+          <label for="id2">
+            <span class="idea-card-icon">🛍️</span>
+            <span class="idea-card-text">Dicas de produtos</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id3" value="Gravação em loja de maquiagem alto padrão" />
+          <label for="id3">
+            <span class="idea-card-icon">🏪</span>
+            <span class="idea-card-text">Gravação em loja de maquiagem alto padrão</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id4" value="Isso x Aquilo (comparativos)" />
+          <label for="id4">
+            <span class="idea-card-icon">⚖️</span>
+            <span class="idea-card-text">Isso x Aquilo — comparativos</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id5" value="Tutorial passo a passo" />
+          <label for="id5">
+            <span class="idea-card-icon">🎬</span>
+            <span class="idea-card-text">Tutorial passo a passo</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id6" value="Antes e depois" />
+          <label for="id6">
+            <span class="idea-card-icon">✨</span>
+            <span class="idea-card-text">Antes e depois</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id7" value="Bastidores do atendimento" />
+          <label for="id7">
+            <span class="idea-card-icon">🎥</span>
+            <span class="idea-card-text">Bastidores do atendimento</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id8" value="Erros comuns e como evitar" />
+          <label for="id8">
+            <span class="idea-card-icon">🚫</span>
+            <span class="idea-card-text">Erros comuns e como evitar</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id9" value="Conteúdo de autoridade / opinião" />
+          <label for="id9">
+            <span class="idea-card-icon">🎙️</span>
+            <span class="idea-card-text">Conteúdo de autoridade / opinião</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+        <div class="idea-card">
+          <input type="checkbox" id="id10" value="Rotina de pele antes do make" />
+          <label for="id10">
+            <span class="idea-card-icon">🧴</span>
+            <span class="idea-card-text">Rotina de pele antes do make</span>
+            <span class="idea-card-check"></span>
+          </label>
+        </div>
+      </div>
+      <div class="ideas-other">
+        <input type="text" id="f_ideias_outro" placeholder="Outra ideia que não está na lista..." />
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-number">05</span>
+      <span class="section-title">Referências e visão</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Quais perfis você admira no Instagram?</label>
+      <p class="field-hint">Coloca os @s ou descreve o estilo que te atrai — pode ser de qualquer área.</p>
+      <textarea id="f_refs" placeholder="Ex: @fulana — gosto do jeito que ela fala, parece próxima mas também tem autoridade..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Como você quer ser reconhecida daqui a 1 ano no digital?</label>
+      <textarea id="f_visao" placeholder="Ex: A maquiadora de referência do RJ para noivas de alto padrão. Quando alguém pensar em make sofisticado, pensa em mim."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Tem algo que você quer que EU saiba antes da nossa diária?</label>
+      <p class="field-hint">O que está no seu coração agora — à vontade.</p>
+      <textarea id="f_extra" placeholder="Escreva à vontade..."></textarea>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <p class="submit-note">Suas respostas chegam direto pra mim.<br>Vou usar tudo isso para criar roteiros que soam como você.</p>
+    <button class="btn-submit" id="btnSubmit" onclick="submitForm()">Enviar Briefing</button>
+    <p class="sending-msg" id="sendingMsg">✦ Enviando suas respostas...</p>
+    <p class="error-msg" id="errorMsg">Ops, algo deu errado. Tente novamente.</p>
+  </div>
+
+</div>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="successScreen">
+  <span class="success-icon">✦</span>
+  <h2 class="success-title">Obrigada,<br><em>Vanessa.</em></h2>
+  <p class="success-text">Recebi seu briefing.<br>Vou estudar cada resposta com cuidado antes da nossa diária.<br><br>Já estou com ideias surgindo pra você. 🖤</p>
+</div>
+
+<div class="footer">
+  <p class="footer-text">Produzido por <span class="footer-brand">JB Studio Criativo</span></p>
+</div>
+
+<script>
+  emailjs.init('GbYRcA6o0GH0W-ph7');
+
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = doc.scrollTop || document.body.scrollTop;
+    const total = doc.scrollHeight - doc.clientHeight;
+    const pct = total > 0 ? (scrolled / total) * 100 : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+  });
+
+  // Highlight selected items
+  document.querySelectorAll('.check-item, .radio-item').forEach(item => {
+    const input = item.querySelector('input');
+    input.addEventListener('change', () => {
+      if (input.type === 'radio') {
+        document.querySelectorAll(`input[name="${input.name}"]`).forEach(r => {
+          r.closest('.radio-item')?.classList.remove('checked');
+        });
+      }
+      item.classList.toggle('checked', input.checked);
+    });
+  });
+
+  function getChecked(groupId) {
+    const group = document.getElementById(groupId);
+    if (!group) return '';
+    return Array.from(group.querySelectorAll('input:checked')).map(i => i.value).join(', ') || '—';
+  }
+
+  function getRadio(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '—';
+  }
+
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? (el.value.trim() || '—') : '—';
+  }
+
+  function getIdeias() {
+    const checked = Array.from(document.querySelectorAll('#f_ideias input:checked')).map(i => i.value);
+    const outro = document.getElementById('f_ideias_outro')?.value.trim();
+    if (outro) checked.push(outro);
+    return checked.length ? checked.join(', ') : '—';
+  }
+
+  async function submitForm() {
+    const btn = document.getElementById('btnSubmit');
+    const sending = document.getElementById('sendingMsg');
+    const errMsg = document.getElementById('errorMsg');
+
+    btn.disabled = true;
+    sending.style.display = 'block';
+    errMsg.style.display = 'none';
+
+    const message = `
+BRIEFING CRIATIVO — VANESSA MELINO
+====================================
+
+01 — QUEM VOCÊ É
+Nome artístico: ${val('f_nome')}
+Em uma frase, o que faz: ${val('f_frase')}
+Tempo de atuação: ${getRadio('tempo')}
+
+02 — PARA QUEM VOCÊ FAZ
+Cliente ideal: ${val('f_cliente')}
+Serviços realizados: ${getChecked('f_servicos')}
+Serviço que quer crescer: ${val('f_crescer')}
+
+03 — COMO VOCÊ FALA
+Jeito de comunicar: ${getRadio('voz')}
+Expressões do dia a dia: ${val('f_expressoes')}
+O que nunca diria: ${val('f_nunca')}
+
+04 — CONTEÚDO E IDEIAS
+Perguntas que clientes fazem: ${val('f_perguntas')}
+O que nunca falou online: ${val('f_nuncafalou')}
+Ideia para o curso de automaquiagem: ${val('f_curso')}
+Conforto na câmera (1–5): ${getRadio('camera')}
+Ideias de conteúdo: ${getIdeias()}
+O que trava na hora de gravar: ${getChecked('f_trava')}
+
+05 — REFERÊNCIAS E VISÃO
+Perfis que admira: ${val('f_refs')}
+Como quer ser reconhecida em 1 ano: ${val('f_visao')}
+Mensagem extra: ${val('f_extra')}
+    `.trim();
+
+    try {
+      await emailjs.send('service_9wdlfjc', 'template_qd873tq', {
+        to_email: 'comercial@jbstudiocriativo.com',
+        subject: 'Briefing Criativo — Vanessa Melino',
+        message: message,
+        from_name: val('f_nome') || 'Vanessa Melino'
+      });
+
+      document.getElementById('formMain').style.display = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      sending.style.display = 'none';
+      errMsg.style.display = 'block';
+    }
+  }
+</script>
+</body>
+</html>
